@@ -1,0 +1,22 @@
+general_settings:
+  dangerously_permit_weak_or_unset_master_key: true
+
+model_list:
+  # PRIMARY CLOUD: Groq
+  - model_name: jarvis-cloud
+    litellm_params:
+      model: groq/openai/gpt-oss-120b
+      api_key: "YOUR_GROQ_KEY_HERE"
+
+  # BACKUP LOCAL: Ollama
+  - model_name: jarvis-local
+    litellm_params:
+      model: ollama/llama3.2:3b
+      api_base: "http://localhost:11434"
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 1
+  allowed_fails: 1
+  cooldown_time: 60
+  fallbacks: [{"jarvis-cloud": ["jarvis-local"]}]
